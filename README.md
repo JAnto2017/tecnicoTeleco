@@ -23,6 +23,24 @@
       - [Ventajas del CIDR](#ventajas-del-cidr)
       - [Ejemplo 1: Crear subredes de una red principal](#ejemplo-1-crear-subredes-de-una-red-principal)
       - [Ejemplo 2: Identificar la subred de una IP](#ejemplo-2-identificar-la-subred-de-una-ip)
+  - [Direcciones IPv6](#direcciones-ipv6)
+    - [¿Qué es IPv6?](#qué-es-ipv6)
+    - [¿Por qué necesitamos IPv6?](#por-qué-necesitamos-ipv6)
+    - [Diferencias entre IPv4 e IPv6](#diferencias-entre-ipv4-e-ipv6)
+    - [¿Cómo son las direcciones IPv6?](#cómo-son-las-direcciones-ipv6)
+    - [Reglas para simplificar direcciones](#reglas-para-simplificar-direcciones)
+    - [Beneficios de IPv6](#beneficios-de-ipv6)
+    - [¿IPv6 reemplaza completamente a IPv4?](#ipv6-reemplaza-completamente-a-ipv4)
+    - [Dirección Unicast Global de Ejemplo](#dirección-unicast-global-de-ejemplo)
+    - [Dirección Link-Local de Ejemplo](#dirección-link-local-de-ejemplo)
+    - [Dirección Multicast de Ejemplo](#dirección-multicast-de-ejemplo)
+    - [Dirección Unicast de Ejemplo](#dirección-unicast-de-ejemplo)
+    - [Dirección Anycast de Ejemplo](#dirección-anycast-de-ejemplo)
+    - [Dirección IPv4-Mapeada de Ejemplo](#dirección-ipv4-mapeada-de-ejemplo)
+    - [Dirección Loopback de Ejemplo](#dirección-loopback-de-ejemplo)
+    - [Dirección No Especificada de Ejemplo](#dirección-no-especificada-de-ejemplo)
+    - [Dirección Multicast para Todos los Routers de Ejemplo](#dirección-multicast-para-todos-los-routers-de-ejemplo)
+    - [Dirección Site-Local (Obsoleta, pero educativa) de Ejemplo](#dirección-site-local-obsoleta-pero-educativa-de-ejemplo)
   - [Protocolos TCP/IP](#protocolos-tcpip)
     - [Red LAN](#red-lan)
     - [Red WAN](#red-wan)
@@ -370,6 +388,223 @@ Supongamos que tienes la red 10.0.0.0/16 y te preguntan a qué subred pertenece 
 4. Ubicación de la IP:
 
    - La dirección 10.0.5.100 pertenece a la primera subred, ya que está dentro del rango 10.0.0.0 a 10.0.15.255.
+
+***
+
+## Direcciones IPv6
+
+### ¿Qué es IPv6?
+
+IPv6 (Protocolo de Internet versión 6) es la versión más reciente del protocolo de Internet, que es como el sistema que permite a los dispositivos (computadoras, teléfonos, servidores, etc.) comunicarse entre sí a través de redes como Internet. Es el sucesor de IPv4, que es la versión que se usa ampliamente desde los inicios de Internet.
+
+### ¿Por qué necesitamos IPv6?
+
+IPv4 tiene una limitación importante: se están acabando las direcciones IP. IPv4 usa direcciones de 32 bits, lo que permite alrededor de 4.3 mil millones de direcciones únicas. Sin embargo:
+
+- Hay más dispositivos conectados a Internet que direcciones disponibles.
+- IPv4 no fue diseñado para manejar el crecimiento exponencial de Internet.
+
+IPv6 resuelve este problema usando direcciones mucho más grandes, de 128 bits, permitiendo aproximadamente 340 undecillones (un número inimaginablemente grande) de direcciones. Esto asegura que haya suficientes direcciones para todos los dispositivos, ahora y en el futuro.
+
+### Diferencias entre IPv4 e IPv6
+
+![alt text](image-4.png)
+
+### ¿Cómo son las direcciones IPv6?
+
+Una dirección IPv6 es más larga y se ve diferente a una de IPv4. Está compuesta por 8 grupos de números hexadecimales, separados por dos puntos (:). Por ejemplo:
+
+```hexadecimal
+  2001:0db8:85a3:0000:0000:8a2e:0370:7334
+```
+
+### Reglas para simplificar direcciones
+
+1. Omitir ceros iniciales: Puedes omitir los ceros al inicio de un grupo. Ejemplo:
+   - 01ab se convierte en 1ab.
+2. Usar :: para ceros consecutivos: Puedes reemplazar múltiples grupos de ceros consecutivos con :: una vez en la dirección. Ejemplo:
+   - 2001:0db8:0000:0000:0000:0000:0000:0001 se simplifica a 2001:db8::1.
+
+### Beneficios de IPv6
+
+1. Más direcciones: Es el principal beneficio. No hay peligro de quedarse sin direcciones.
+2. Mejor rendimiento y eficiencia:
+   - Configuración automática: Los dispositivos pueden configurarse automáticamente sin necesitar DHCP (protocolo que asigna IP en IPv4).
+   - Mejora en el enrutamiento: Los paquetes viajan de forma más eficiente.
+3. Seguridad integrada: Incluye soporte nativo para IPsec, un conjunto de protocolos para cifrar y autenticar el tráfico de red.
+4. Soporte para el Internet de las Cosas (IoT): Con tantos dispositivos conectados, IPv6 es fundamental para soportar este ecosistema.
+
+### ¿IPv6 reemplaza completamente a IPv4?
+
+Por ahora, no. IPv4 sigue siendo ampliamente usado, pero IPv6 está ganando terreno. Muchos sistemas funcionan con ambos protocolos a la vez (esto se llama doble pila, o dual stack).
+
+1. Dirección Unicast Global
+
+  > Ejemplo: `2001:0db8:85a3:0000:0000:8a2e:0370:7334` <br>
+  > Descripción:
+
+  > - Es una dirección unicast global, utilizada para identificar un único dispositivo en Internet.
+  > - Es equivalente a las direcciones públicas en IPv4.
+  > - Empiezan generalmente con 2000::/3 (bloques que inician con 2 o 3), lo que indica que pertenecen al rango de direcciones globales.
+
+2. Dirección Link-Local
+
+  > Ejemplo: `fe80::1` <br>
+  > Descripción:
+
+  > - Estas direcciones comienzan con fe80::/10 y se usan para comunicación dentro de una red local.
+  > - No son enrutables, lo que significa que no pueden salir del enlace local (un solo segmento de red, como tu router).
+  > -Se configuran automáticamente en cada interfaz de red, incluso si no hay un servidor DHCP.
+  > -Ejemplo práctico: un dispositivo puede usar esta dirección para hablar con su router sin necesitar una IP pública.
+
+3. Dirección de Loopback
+
+  > Ejemplo: `::1` <br>
+  > Descripción:
+
+  > - Es la versión IPv6 de 127.0.0.1 en IPv4.
+  > - Sirve para que un dispositivo pueda enviarse mensajes a sí mismo.
+  > - Se usa comúnmente para pruebas o diagnósticos de red en el propio dispositivo.
+
+4. Dirección Multicast
+
+  > Ejemplo: `ff02::1` <br>
+  > Descripción:
+
+  > - Las direcciones multicast comienzan con ff00::/8 y se utilizan para enviar paquetes a múltiples dispositivos simultáneamente en una red.
+  > - ff02::1 es una dirección especial que significa "todos los nodos en el enlace local".
+  > - Ejemplo práctico: un mensaje enviado a esta dirección será recibido por todos los dispositivos de la red local.
+
+5. Dirección de Ejemplo (Documentation Address)
+
+  > Ejemplo: `2001:0db8::/32` <br>
+  > Descripción:
+
+  > - Estas direcciones están reservadas para ejemplos y documentación técnica.
+  > - Nunca se usarán en redes reales.
+  > - Ejemplo práctico: son las que ves en libros, guías y tutoriales como este.
+
+6. Dirección Anycast
+
+  > Ejemplo: `2001:0db8:85a3::1` (puede ser cualquier dirección unicast configurada como anycast) <br>
+  > Descripción:
+
+  > - Una dirección anycast se asigna a múltiples dispositivos, pero cuando alguien intenta comunicarse con ella, el tráfico se dirige al dispositivo más cercano (en términos de red).
+  > - Uso típico: balanceo de carga o servicios distribuidos, como servidores de DNS.
+
+7. Dirección Reservada (Inutilizable)
+
+  > Ejemplo: `::` <br>
+  > Descripción:
+
+  > - Es una dirección especial llamada dirección no especificada.
+  > - Indica la ausencia de dirección.
+  > - Ejemplo práctico: durante el inicio de un dispositivo antes de que obtenga una IP válida.
+
+8. Dirección IPv4-Mapeada en IPv6
+
+  > Ejemplo: `::ffff:192.0.2.128` <br>
+  > Descripción:
+
+  > - Estas direcciones permiten que IPv6 sea compatible con IPv4.
+  > - El prefijo ::ffff: se usa para representar una dirección IPv4 dentro de un entorno IPv6.
+  > - Ejemplo práctico: servidores que admiten tanto IPv4 como IPv6 usan estas direcciones para procesar clientes IPv4.
+
+### Dirección Unicast Global de Ejemplo
+
+Dirección: `2001:db8:abcd:0012:0000:0000:0000:0001`
+Prefijo de red: `/64`
+Explicación:
+
+- Es una dirección unicast global que identifica un único dispositivo en Internet.
+- El prefijo /64 indica que los primeros 64 bits son la parte de red, y los restantes son la parte de host.
+- Se usa para comunicación en redes globales.
+
+### Dirección Link-Local de Ejemplo
+
+Dirección: `fe80::1`
+Prefijo de red: `/10`
+Explicación:
+
+- Es una dirección link-local, que solo es válida dentro del enlace local (segmento de red).
+- El prefijo /10 indica que las direcciones link-local comienzan con los 10 bits 1111111010.
+- No es enrutable y se genera automáticamente en las interfaces de red.
+
+### Dirección Multicast de Ejemplo
+
+Dirección: `ff02::1`
+Prefijo de red: `/8`
+Explicación:
+
+- Es una dirección multicast para enviar datos a todos los nodos en un enlace local.
+- El prefijo /8 significa que todas las direcciones que comienzan con ff son multicast.
+- Se usa para enviar mensajes a varios dispositivos simultáneamente.
+
+### Dirección Unicast de Ejemplo
+
+Dirección: `2001:0db8:85a3::8a2e:370:7334`
+Prefijo de red: `/32`
+Explicación:
+
+- Es una dirección reservada para documentación y no se utiliza en redes reales.
+- El prefijo /32 identifica que pertenece al rango de direcciones de ejemplo 2001:db8::/32.
+
+### Dirección Anycast de Ejemplo
+
+Dirección: `2001:db8:abcd:0012::1`
+Prefijo de red: `/64`
+Explicación:
+
+- Es una dirección unicast global que puede configurarse como anycast para identificar múltiples nodos.
+- El prefijo /64 permite que la dirección sea parte de una subred estándar.
+
+### Dirección IPv4-Mapeada de Ejemplo
+
+Dirección: `::ffff:192.0.2.128`
+Prefijo de red: `/96`
+Explicación:
+
+- Esta dirección permite representar direcciones IPv4 en un entorno IPv6.
+- El prefijo /96 significa que los primeros 96 bits están reservados para IPv6, y los últimos 32 bits contienen la dirección IPv4.
+
+### Dirección Loopback de Ejemplo
+
+Dirección: `::1`
+Prefijo de red: `/128`
+Explicación:
+
+- Es una dirección especial que apunta al propio dispositivo.
+- El prefijo /128 indica que es una única dirección específica.
+- Se usa para pruebas y diagnósticos locales.
+
+### Dirección No Especificada de Ejemplo
+
+Dirección: `::`
+Prefijo de red: `/128`
+Explicación:
+
+- Es una dirección que indica ausencia de dirección.
+- Se usa, por ejemplo, cuando un dispositivo aún no ha recibido una dirección válida.
+
+### Dirección Multicast para Todos los Routers de Ejemplo
+
+Dirección: `ff02::2`
+Prefijo de red: `/8`
+Explicación:
+
+- Es una dirección multicast para comunicarse con todos los routers en un enlace local.
+- Útil para descubrimiento y configuración automática.
+
+### Dirección Site-Local (Obsoleta, pero educativa) de Ejemplo
+
+Dirección: fec0::abcd:1234
+Prefijo de red: /10
+Explicación:
+
+- Antiguamente se usaba para redes internas como alternativa a las direcciones privadas de IPv4.
+- Aunque está obsoleta, sigue apareciendo en algunos sistemas más antiguos.
+
+***
 
 ## Protocolos TCP/IP
 
