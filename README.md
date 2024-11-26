@@ -46,6 +46,11 @@
     - [Red WAN](#red-wan)
       - [Internet (WWW)](#internet-www)
     - [TCP/IP](#tcpip)
+  - [Introducción a los Modelos de Referencia](#introducción-a-los-modelos-de-referencia)
+    - [Modelo OSI](#modelo-osi)
+    - [Modelo TCP/IP](#modelo-tcpip)
+      - [Encapsulación de paquetes](#encapsulación-de-paquetes)
+      - [Dispositivos integrados en el Modelo TCP/IP](#dispositivos-integrados-en-el-modelo-tcpip)
 
 ## Introducción
 
@@ -114,7 +119,7 @@ Dependiendo del rango, se determinan a qué clase pertenecen las direcciones IPv
   - Hasta 126.255.255.255 (porque 127.x.x.x es reservado para loopback).
 - Máscara predeterminada: 255.0.0.0 o /8
 - Número de redes: 128 (aunque solo 126 asignables).
-- Número de hosts por red: 2<sup>24</sup> − 2 = 16.777.214 (se excluyen la dirección de red y broadcast).
+- Número de hosts por red: 2<sup>24</sup> - 2 = 16.777.214 (se excluyen la dirección de red y broadcast).
 
 #### Clase B
 
@@ -129,7 +134,7 @@ Dependiendo del rango, se determinan a qué clase pertenecen las direcciones IPv
   - Hasta 191.255.0.0.
 - Máscara predeterminada: 255.255.0.0 o /16
 - Número de redes: 2<sup>14</sup> = 16.384.
-- Número de hosts por red: 2<sup>16</sup> − 2 = 65.534.
+- Número de hosts por red: 2<sup>16</sup> - 2 = 65.534.
 
 #### Clase C
 
@@ -144,7 +149,7 @@ Dependiendo del rango, se determinan a qué clase pertenecen las direcciones IPv
   - Hasta 223.255.255.0.
 - Máscara predeterminada: 255.255.255.0 o /24
 - Número de redes: 2<sup>21</sup> = 2.097.152.
-- Número de hosts por red: 2<sup>8</sup> − 2 = 254.
+- Número de hosts por red: 2<sup>8</sup> - 2 = 254.
 
 #### Clase D
 
@@ -320,8 +325,8 @@ Con CIDR, podemos crear subredes dividiendo una red principal en bloques más pe
 
 Fórmulas clave para subredes:
 
-1. Cantidad de subredes: 2<sup>𝑛</sup>, donde 𝑛 es el número de bits "prestados" de la parte de host para la parte de red.
-2. Cantidad de hosts por subred: 2<sup>m</sup> − 2, donde m es el número de bits restantes para los hosts (se restan 2 para excluir la dirección de red y de broadcast).
+1. Cantidad de subredes: 2<sup>_n_</sup>, donde _n_ es el número de bits "prestados" de la parte de host para la parte de red.
+2. Cantidad de hosts por subred: 2<sup>m</sup> - 2, donde m es el número de bits restantes para los hosts (se restan 2 para excluir la dirección de red y de broadcast).
 3. Tamaño de cada subred: 2<sup>𝑚</sup>  direcciones (incluyendo red y broadcast).
 4. Intervalo entre subredes: El incremento entre direcciones de red es igual al tamaño de la subred.
 
@@ -337,13 +342,13 @@ Supongamos que tienes la red 192.168.1.0/24 y quieres dividirla en 4 subredes.
 
 1. Determinar los bits necesarios para subredes:
 
-   - 2<sup>𝑛</sup> ≥ 4, donde 𝑛 es el número de bits prestados.
-     - 𝑛=2, porque 2<sup>2</sup> = 4.
+   - 2<sup>_n_</sup> ≥ 4, donde _n_ es el número de bits prestados.
+     - _n_ = 2, porque 2<sup>2</sup> = 4.
    - Máscara original: /24 → Nueva máscara: /26 (se añaden 2 bits).
 
 2. Tamaño de cada subred:
 
-   - 2<sup>6</sup> = 64 direcciones por subred (32−26=6, bits para hosts).
+   - 2<sup>6</sup> = 64 direcciones por subred (32 - 26 = 6, bits para hosts).
 
 3. Direcciones de red y broadcast: Dividimos en bloques de 64 direcciones:
 
@@ -371,7 +376,7 @@ Supongamos que tienes la red 10.0.0.0/16 y te preguntan a qué subred pertenece 
 1. Tamaño de cada subred:
 
    - Máscara original: /16 → Nueva máscara: /20.
-   - Número de bits para hosts: 32 − 20 = 12.
+   - Número de bits para hosts: 32 - 20 = 12.
    - Tamaño de subred: 2<sup>12</sup> = 4.096 direcciones.
 
 2. Intervalo entre subredes:
@@ -623,3 +628,66 @@ Es la red _World Wide Web_. Es una red de redes interconectando resde WAN.
 ### TCP/IP
 
 _Transport Control Protocol/Internet Protocol_. Permite la comunicación de manera estándar con los dispositivos en la red Internet.
+
+## Introducción a los Modelos de Referencia
+
+- Modelo AppleTalk.
+- TCP/IP. Es la suite de protocolos estándar finalmente implementados por la comunidad de Internet.
+- OSI. Modelo estándar desarrollado por la ISO y publicado en 1984 a partir del modelo DecNet y SNA. Es el más ampliamente utilizado por los fabricantes y en la educación.
+
+Ventajas de implementar un modelo de capas:
+
+1. Permite la interoperabilidad de diferentes fabricantes.
+2. Divide las operaciones complejas de la red en capas específicas más fácilmente administrables.
+3. Facilita el desarrollo de una ingeniería modular y que permite introducir cambios parciales en una capa, sin requerir cambios en la totalidad.
+4. Define interfaces estándar para la integración "plug and play" de diferentes fabricantes.
+5. Permite el desarrollo de interfaces estándar que facilitan la interoperabilidad de diferentes fabricantes.
+6. Permite elaborar especificaciones que ayudan al progreso de la industria con la introdcción y desarrollo de nuevas teconología.
+7. Facilita la resolución de fallos.
+
+### Modelo OSI
+
+Soluciona los problemas generados por el desarrollo e implementación de diferentes modelos propietarios diseñados por diferentes fabricantes (IBM, DECNet).
+
+| Capa | Protocolos |
+| --- | --- |
+| Aplicación | HTTP, SMTP/POP3, SNMP, FTP, SSH |
+| Presentación | JPG, MP3, HTML |
+| Sesión | Network File System, Linux, SQL |
+| Transporte | TCP, UDP, PDU segmento |
+| Red | Router, IPv4, IPv6, IPX, AppleTalk, OSPF, EIGRP |
+| Enlace de Datos | Switch,  Access Point, Bridge, MAC, PPP, Ethernet, PDU trama |
+| Física | Hub, Módem, Segmenta PDU, Trasnfiere, RS-232, RJ-45, v.35 |
+
+Es el modelo de arquitectura primaria para redes.
+
+### Modelo TCP/IP
+
+Modelo de capas. Es el modelo de aplicación en Internet.
+
+| Capa | Descripción |
+| --- | --- |
+| Aplicación | Presentación codificación y control |
+| Transporte | Segmenta y reemsamblan datos, implementa servicios |
+| Internet | Direccionamiento jerárquico encuentra mejor ruta |
+| Acceso a Red | Controla entre física de datos |
+
+Equivalencia entre _Modelo OSI_ y el _Modelo TCP/IP_:
+
+![alt text](image-5.png)
+
+#### Encapsulación de paquetes
+
+![alt text](image-6.png)
+
+En cada una de las capas se añaden: **Datos**, **Segmentos**, **Paquetes** y **Tramas**.
+
+![alt text](image-7.png)
+
+1. **Segmento** se conforma en la capa _Transporte_. Se trata del resultado de la segmentación del flujo de datos que provienen de las capas superiores con el objeto de ser transmitidos a través de la capa física.
+2. **Paquete**. A veces también se llama **datagrama**. Encapsula el segmento enviado por la capa de transporte para ser enrutado a través de la red. Incluyendo las direcciones lógicas.
+3. **Trama**. Encapsula el paquete o datagrama enviado por la capa de red para ser entregado a un dispositivo en la LAN. Incluye las direcciones físicas. También recibe la denominación de **frame**.
+
+#### Dispositivos integrados en el Modelo TCP/IP
+
+![alt text](image-8.png)
