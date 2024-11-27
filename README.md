@@ -5,6 +5,7 @@
     - [Elementos de una red](#elementos-de-una-red)
     - [Símbología en las redes de datos](#símbología-en-las-redes-de-datos)
   - [Direccionamiento IP](#direccionamiento-ip)
+  - [Direcciones IPv4 Públicas y Privadas](#direcciones-ipv4-públicas-y-privadas)
     - [Máscara de subred](#máscara-de-subred)
     - [Clasificación de las direcciones IPv4](#clasificación-de-las-direcciones-ipv4)
       - [Clase A](#clase-a)
@@ -12,6 +13,7 @@
       - [Clase C](#clase-c)
       - [Clase D](#clase-d)
       - [Clase E](#clase-e)
+  - [Asignación de direcciones IP](#asignación-de-direcciones-ip)
     - [Direcciones IPv4 especiales](#direcciones-ipv4-especiales)
       - [¿Por qué estas direcciones son de propósito privado?](#por-qué-estas-direcciones-son-de-propósito-privado)
       - [¿Se pueden asignar estas direcciones a los hosts?](#se-pueden-asignar-estas-direcciones-a-los-hosts)
@@ -52,6 +54,8 @@
       - [Encapsulación de paquetes](#encapsulación-de-paquetes)
       - [Dispositivos integrados en el Modelo TCP/IP](#dispositivos-integrados-en-el-modelo-tcpip)
 
+---
+
 ## Introducción
 
 Técnico Telecomunicaciones CCNA es un curso con documentación sobre las configuraciones en las redes siguiendo la nomenclatura establecida en CCNA 200-301.
@@ -76,6 +80,8 @@ mindmap
 
 ![alt text](image.png)
 
+---
+
 ## Direccionamiento IP
 
 Una dirección IPv4 es una línea de 32 bits, separados en cuatro grupos con 8 bits cada uno llamados _octetos_. Cada uno de los _octetos_ están separados entre sí por un punto.
@@ -84,6 +90,20 @@ Una dirección IPv4 está dividida en dos partes: una porción de bits direccion
 
 - Las direcciones IPv4 que terminen en **0**, están destinadas a direccionar la **Red**.
 - Los direcciones IPv4 que terminen en **255**, están destinadas al **Broadcas**.
+
+## Direcciones IPv4 Públicas y Privadas
+
+Algunas direcciones IPv4 no se pueden usar para salir a Internet y otras se asignan específicamente para enrutar a Internet.
+
+Las direcciones IPv4 públicas, son direcciones que se enrutan globalmente entre Routers de proveedores de servicios de Internet (ISP). No obstante, no todas las direcciones IPv4 disponibles pueden usarse en Internet.
+
+Existen bloques de direcciones denominadas, direcciones privadas que la mayoría de las organizaciones usan para asignar a los hosts internos. Las direcciones IPv4 privadas no son exclusivas y cualquier red interna puede usarlas.
+
+| Dirección de Red/Prefijo | Rango direcciones privadas RFC 1918 |
+| --- | --- |
+| 10.0.0.0/8 | 10.0.0.0 a 10.255.255.255 |
+| 172.16.0.0/12 | 172.16.0.0 a 172.31.255.255 |
+| 192.168.0.0/16 | 192.168.0.0 a 192.168.255.255 |
 
 ### Máscara de subred
 
@@ -179,6 +199,22 @@ Dependiendo del rango, se determinan a qué clase pertenecen las direcciones IPv
 Tabla resumen.
 
 ![alt text](image-3.png)
+
+## Asignación de direcciones IP
+
+Las direcciones IPv4 públicas son direcciones en las que se realiza routing globalmente entre los routers ISP. Las direcciones IPv4 públicas deben ser únicas.
+
+Tanto las direcciones IPv4 como las IPv6 son administradas por la Autoridad de Números Asignados a Internet (Internet Assigned Numbers Authority, IANA). La IANA administra y asigna bloques de direcciones IP a los Registros Regionales de Internet (RIR). Los cinco RIR se muestran en la figura.
+
+Los RIR se encargan de asignar direcciones IP a los ISP, quienes a su vez proporcionan bloques de direcciones IPv4 a las organizaciones y a los ISP más pequeños. Las organizaciones pueden obtener sus direcciones directamente de un RIR, según las políticas de ese RIR.
+
+![alt text](image-9.png)
+
+- **AfriNIC** (Centro de Información de Redes Africano) - Región de África
+- **APNIC** (Centro de Información de Redes de Asia Pacífico) - Región de Asia/Pacífico
+- **ARIN** (Registro Americano de Números de Internet) - Región de América del Norte
+- **LACNIC** (Registro Regional de Direcciones IP de América Latina y el Caribe) - América Latina y algunas Islas del Caribe
+- **RIPE NCC**(Réseaux IP Européens Network Coordination Centre) - Europa, Medio Oriente y Asia Central
 
 ### Direcciones IPv4 especiales
 
