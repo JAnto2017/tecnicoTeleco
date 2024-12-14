@@ -53,6 +53,10 @@
     - [Modelo TCP/IP](#modelo-tcpip)
       - [Encapsulación de paquetes](#encapsulación-de-paquetes)
       - [Dispositivos integrados en el Modelo TCP/IP](#dispositivos-integrados-en-el-modelo-tcpip)
+  - [Subnet](#subnet)
+    - [Subneteo Classfull](#subneteo-classfull)
+    - [Pasos para el Subneteo tradicional](#pasos-para-el-subneteo-tradicional)
+    - [Pasos para el Subneteo Magic Number\_](#pasos-para-el-subneteo-magic-number_)
 
 ---
 
@@ -139,7 +143,7 @@ Dependiendo del rango, se determinan a qué clase pertenecen las direcciones IPv
   - Hasta 126.255.255.255 (porque 127.x.x.x es reservado para loopback).
 - Máscara predeterminada: 255.0.0.0 o /8
 - Número de redes: 128 (aunque solo 126 asignables).
-- Número de hosts por red: 2<sup>24</sup> - 2 = 16.777.214 (se excluyen la dirección de red y broadcast).
+- Número de hosts por red: $2^{24} - 2 = 16.777.214$ (se excluyen la dirección de red y broadcast).
 
 #### Clase B
 
@@ -153,8 +157,8 @@ Dependiendo del rango, se determinan a qué clase pertenecen las direcciones IPv
   - Desde 128.0.0.0
   - Hasta 191.255.0.0.
 - Máscara predeterminada: 255.255.0.0 o /16
-- Número de redes: 2<sup>14</sup> = 16.384.
-- Número de hosts por red: 2<sup>16</sup> - 2 = 65.534.
+- Número de redes: $2^{14} = 16.384$.
+- Número de hosts por red: $2^{16} - 2 = 65.534$.
 
 #### Clase C
 
@@ -168,8 +172,8 @@ Dependiendo del rango, se determinan a qué clase pertenecen las direcciones IPv
   - Desde 192.0.0.0
   - Hasta 223.255.255.0.
 - Máscara predeterminada: 255.255.255.0 o /24
-- Número de redes: 2<sup>21</sup> = 2.097.152.
-- Número de hosts por red: 2<sup>8</sup> - 2 = 254.
+- Número de redes: $2^{21} = 2.097.152$.
+- Número de hosts por red: $2^8 - 2 = 254$.
 
 #### Clase D
 
@@ -361,9 +365,9 @@ Con CIDR, podemos crear subredes dividiendo una red principal en bloques más pe
 
 Fórmulas clave para subredes:
 
-1. Cantidad de subredes: 2<sup>_n_</sup>, donde _n_ es el número de bits "prestados" de la parte de host para la parte de red.
-2. Cantidad de hosts por subred: 2<sup>m</sup> - 2, donde m es el número de bits restantes para los hosts (se restan 2 para excluir la dirección de red y de broadcast).
-3. Tamaño de cada subred: 2<sup>𝑚</sup>  direcciones (incluyendo red y broadcast).
+1. Cantidad de subredes: $2^n$, donde _n_ es el número de bits "prestados" de la parte de host para la parte de red.
+2. Cantidad de hosts por subred: $2^m - 2$, donde _m_ es el número de bits restantes para los hosts (se restan 2 para excluir la dirección de red y de broadcast).
+3. Tamaño de cada subred: $2^𝑚$  direcciones (incluyendo red y broadcast).
 4. Intervalo entre subredes: El incremento entre direcciones de red es igual al tamaño de la subred.
 
 #### Ventajas del CIDR
@@ -378,13 +382,13 @@ Supongamos que tienes la red 192.168.1.0/24 y quieres dividirla en 4 subredes.
 
 1. Determinar los bits necesarios para subredes:
 
-   - 2<sup>_n_</sup> ≥ 4, donde _n_ es el número de bits prestados.
-     - _n_ = 2, porque 2<sup>2</sup> = 4.
+   - $2^n ≥ 4$, donde _n_ es el número de bits prestados.
+     - _n_ = 2, porque $2^2 = 4$.
    - Máscara original: /24 → Nueva máscara: /26 (se añaden 2 bits).
 
 2. Tamaño de cada subred:
 
-   - 2<sup>6</sup> = 64 direcciones por subred (32 - 26 = 6, bits para hosts).
+   - $2^6 = 64$ direcciones por subred (32 - 26 = 6, bits para hosts).
 
 3. Direcciones de red y broadcast: Dividimos en bloques de 64 direcciones:
 
@@ -413,7 +417,7 @@ Supongamos que tienes la red 10.0.0.0/16 y te preguntan a qué subred pertenece 
 
    - Máscara original: /16 → Nueva máscara: /20.
    - Número de bits para hosts: 32 - 20 = 12.
-   - Tamaño de subred: 2<sup>12</sup> = 4.096 direcciones.
+   - Tamaño de subred: $2^{12} = 4.096$ direcciones.
 
 2. Intervalo entre subredes:
 
@@ -430,7 +434,7 @@ Supongamos que tienes la red 10.0.0.0/16 y te preguntan a qué subred pertenece 
 
    - La dirección 10.0.5.100 pertenece a la primera subred, ya que está dentro del rango 10.0.0.0 a 10.0.15.255.
 
-***
+---
 
 ## Direcciones IPv6
 
@@ -479,77 +483,69 @@ Una dirección IPv6 es más larga y se ve diferente a una de IPv4. Está compues
 
 Por ahora, no. IPv4 sigue siendo ampliamente usado, pero IPv6 está ganando terreno. Muchos sistemas funcionan con ambos protocolos a la vez (esto se llama doble pila, o dual stack).
 
-1. Dirección Unicast Global
+Dirección **Unicast Global**
 
-  > Ejemplo: `2001:0db8:85a3:0000:0000:8a2e:0370:7334` <br>
+  > Ejemplo: `2001:0db8:85a3:0000:0000:8a2e:0370:7334` </br>
   > Descripción:
+    - Es una dirección unicast global, utilizada para identificar un único dispositivo en Internet.
+    - Es equivalente a las direcciones públicas en IPv4.
+    - Empiezan generalmente con 2000::/3 (bloques que inician con 2 o 3), lo que indica que pertenecen al rango de direcciones globales.
 
-  > - Es una dirección unicast global, utilizada para identificar un único dispositivo en Internet.
-  > - Es equivalente a las direcciones públicas en IPv4.
-  > - Empiezan generalmente con 2000::/3 (bloques que inician con 2 o 3), lo que indica que pertenecen al rango de direcciones globales.
+Dirección **Link-Local**
 
-2. Dirección Link-Local
-
-  > Ejemplo: `fe80::1` <br>
+  > Ejemplo: `fe80::1` </br>
   > Descripción:
+    - Estas direcciones comienzan con fe80::/10 y se usan para comunicación dentro de una red local.
+    - No son enrutables, lo que significa que no pueden salir del enlace local (un solo segmento de red, como tu router).
+    - Se configuran automáticamente en cada interfaz de red, incluso si no hay un servidor DHCP.
+    - Ejemplo práctico: un dispositivo puede usar esta dirección para hablar con su router sin necesitar una IP pública.
 
-  > - Estas direcciones comienzan con fe80::/10 y se usan para comunicación dentro de una red local.
-  > - No son enrutables, lo que significa que no pueden salir del enlace local (un solo segmento de red, como tu router).
-  > -Se configuran automáticamente en cada interfaz de red, incluso si no hay un servidor DHCP.
-  > -Ejemplo práctico: un dispositivo puede usar esta dirección para hablar con su router sin necesitar una IP pública.
+Dirección de **Loopback**
 
-3. Dirección de Loopback
-
-  > Ejemplo: `::1` <br>
+  > Ejemplo: `::1` </br>
   > Descripción:
+     - Es la versión IPv6 de 127.0.0.1 en IPv4.
+     - Sirve para que un dispositivo pueda enviarse mensajes a sí mismo.
+     - Se usa comúnmente para pruebas o diagnósticos de red en el propio dispositivo.
 
-  > - Es la versión IPv6 de 127.0.0.1 en IPv4.
-  > - Sirve para que un dispositivo pueda enviarse mensajes a sí mismo.
-  > - Se usa comúnmente para pruebas o diagnósticos de red en el propio dispositivo.
+Dirección **Multicast**
 
-4. Dirección Multicast
-
-  > Ejemplo: `ff02::1` <br>
+  > Ejemplo: `ff02::1` </br>
   > Descripción:
+     - Las direcciones multicast comienzan con ff00::/8 y se utilizan para enviar paquetes a múltiples dispositivos simultáneamente en una red.
+     - ff02::1 es una dirección especial que significa "todos los nodos en el enlace local".
+     - Ejemplo práctico: un mensaje enviado a esta dirección será recibido por todos los dispositivos de la red local.
 
-  > - Las direcciones multicast comienzan con ff00::/8 y se utilizan para enviar paquetes a múltiples dispositivos simultáneamente en una red.
-  > - ff02::1 es una dirección especial que significa "todos los nodos en el enlace local".
-  > - Ejemplo práctico: un mensaje enviado a esta dirección será recibido por todos los dispositivos de la red local.
+Dirección de Ejemplo (**Documentation Address**)
 
-5. Dirección de Ejemplo (Documentation Address)
-
-  > Ejemplo: `2001:0db8::/32` <br>
+  > Ejemplo: `2001:0db8::/32` </br>
   > Descripción:
+     - Estas direcciones están reservadas para ejemplos y documentación técnica.
+     - Nunca se usarán en redes reales.
+     - Ejemplo práctico: son las que ves en libros, guías y tutoriales como este.
 
-  > - Estas direcciones están reservadas para ejemplos y documentación técnica.
-  > - Nunca se usarán en redes reales.
-  > - Ejemplo práctico: son las que ves en libros, guías y tutoriales como este.
+Dirección **Anycast**
 
-6. Dirección Anycast
-
-  > Ejemplo: `2001:0db8:85a3::1` (puede ser cualquier dirección unicast configurada como anycast) <br>
+  > Ejemplo: `2001:0db8:85a3::1` (puede ser cualquier dirección unicast configurada como anycast) </br>
   > Descripción:
+     - Una dirección anycast se asigna a múltiples dispositivos, pero cuando alguien intenta comunicarse con ella, el tráfico se dirige al dispositivo más cercano (en términos de red).
+     - Uso típico: balanceo de carga o servicios distribuidos, como servidores de DNS.
 
-  > - Una dirección anycast se asigna a múltiples dispositivos, pero cuando alguien intenta comunicarse con ella, el tráfico se dirige al dispositivo más cercano (en términos de red).
-  > - Uso típico: balanceo de carga o servicios distribuidos, como servidores de DNS.
+Dirección Reservada (**Inutilizable**)
 
-7. Dirección Reservada (Inutilizable)
-
-  > Ejemplo: `::` <br>
+  > Ejemplo: `::` </br>
   > Descripción:
+     - Es una dirección especial llamada dirección no especificada.
+     - Indica la ausencia de dirección.
+     - Ejemplo práctico: durante el inicio de un dispositivo antes de que obtenga una IP válida.
 
-  > - Es una dirección especial llamada dirección no especificada.
-  > - Indica la ausencia de dirección.
-  > - Ejemplo práctico: durante el inicio de un dispositivo antes de que obtenga una IP válida.
+1. Dirección **IPv4-Mapeada en IPv6**
 
-8. Dirección IPv4-Mapeada en IPv6
-
-  > Ejemplo: `::ffff:192.0.2.128` <br>
+  > Ejemplo: `::ffff:192.0.2.128` </br>
   > Descripción:
-
-  > - Estas direcciones permiten que IPv6 sea compatible con IPv4.
-  > - El prefijo ::ffff: se usa para representar una dirección IPv4 dentro de un entorno IPv6.
-  > - Ejemplo práctico: servidores que admiten tanto IPv4 como IPv6 usan estas direcciones para procesar clientes IPv4.
+     - Estas direcciones permiten que IPv6 sea compatible con IPv4.
+     - El prefijo ::ffff: se usa para representar una dirección IPv4 dentro de un entorno IPv6.
+     - Ejemplo práctico: servidores que admiten tanto IPv4 como IPv6 usan estas direcciones para procesar clientes IPv4.
 
 ### Dirección Unicast Global de Ejemplo
 
@@ -645,7 +641,7 @@ Explicación:
 - Antiguamente se usaba para redes internas como alternativa a las direcciones privadas de IPv4.
 - Aunque está obsoleta, sigue apareciendo en algunos sistemas más antiguos.
 
-***
+---
 
 ## Protocolos TCP/IP
 
@@ -727,3 +723,61 @@ En cada una de las capas se añaden: **Datos**, **Segmentos**, **Paquetes** y **
 #### Dispositivos integrados en el Modelo TCP/IP
 
 ![alt text](image-8.png)
+
+---
+
+## Subnet
+
+>[!NOTE]
+>
+>Es la creación de subredes.</br>
+>Las técnicas son: _subneteo tradicional_ y _Magic Number_.
+
+### Subneteo Classfull
+
+- No utiliza la subred cero.
+- Todas las subredes son del mismo tamaño, por lo que, las subredes utilizan la misma máscara de red.
+
+### Pasos para el Subneteo tradicional
+
+Realizar el ejemplo determinando 6 subredes usando la IP de red 192.168.1.0
+
+1. Determinar la clase de dirección IP.
+2. Máscara por defecto. Bits destinados a _red_ bit destinados a _host_ aplicar la función AND.
+3. Resolución de la incógnita. Determinar número de bits necesarios para direccionar las subredes $2^n - 2$.
+4. Cálcular las IPs de las subredes. Máscara por defecto y máscara con los bits paso anterior puestos a uno.
+5. Creación de subredes. Combinaciones de los bits de la máscara, calculados en el paso 3. Indicarán las distintas subredes.
+6. Cálculo de los rangos de las subreeds. Primera IP utilizable, última IP utilizable. Lo que está en medio de la IP de la subred y la IP de broadcast.
+
+### Pasos para el Subneteo Magic Number_
+
+El número mágico (_magic number_) es el **256**.
+
+Realizar el ejemplo anterior determinando 6 subredes usando la IP de red 192.168.1.0
+
+1. Clase por defecto: C
+2. Máscara de red por defecto: 255.255.255.0
+3. Resolución de la incógnita: $2^3 = 6$ Indica que tomaremos 3 bit para las 6 combinaciones.
+4. Determinar nueva máscara: 225.255.255.224 ($224d = 11100000b$ del cuarto octeto de la máscara)
+5. Magic Number: a 256 le restamos el último número diferente de cero de la máscara de red $256 - 224 = 32$. Cada subred irá en rangos de 32.
+6. Cálculo de las subredes y rangos de host.
+   1. _subred 1_ => 192.168.1.32
+   2. _subred 2_ => 192.168.1.64
+   3. _subred 3_ => 192.168.1.96
+   4. _subred 4_ => 192.168.1.128
+   5. _subred 5_ => 192.168.1.160
+   6. _subred 6_ => 192.168.1.192
+
+| Subred | Broadcast | Rango de host |
+| --- | --- | --- |
+| 192.168.1.31 | 192.168.1.63 | 192.168.1.33 - 192.168.1.62 |
+| 192.168.1.64 | 192.168.1.95 | 192.168.1.65 - 192.168.1.94 |
+| 192.168.1.96 | 192.168.1.127 | 192.168.1.97 - 192.168.1.126 |
+| 192.168.1.128 | 192.168.1.159 | 192.168.1.127 - 192.168.1.158 |
+| 192.168.1.160 | 192.168.1.192 | 192.168.1.161 - 192.168.1.190 |
+| 192.168.1.192 | 192.168.1.223 | 192.168.1.193 - 192.168.1.222 |
+
+>[!TIP]
+>
+>En el caso de la última subred le vamos a sumar 32 para obtener la práxima IP.</br>
+>Se resta 1 para obtener el _broadcast_.
