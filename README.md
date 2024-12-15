@@ -57,6 +57,8 @@
     - [Subneteo Classfull](#subneteo-classfull)
     - [Pasos para el Subneteo tradicional](#pasos-para-el-subneteo-tradicional)
     - [Pasos para el Subneteo Magic Number\_](#pasos-para-el-subneteo-magic-number_)
+  - [VLSM tipo C](#vlsm-tipo-c)
+  - [VLSM tipos A y B](#vlsm-tipos-a-y-b)
 
 ---
 
@@ -781,3 +783,50 @@ Realizar el ejemplo anterior determinando 6 subredes usando la IP de red 192.168
 >
 >En el caso de la última subred le vamos a sumar 32 para obtener la práxima IP.</br>
 >Se resta 1 para obtener el _broadcast_.
+
+## VLSM tipo C
+
+>[!IMPORTANT]
+>VLSM (Variable Length Subnet Mask)</br>
+>Enlace web con una calculadora de subneteo:</br>
+>[VLSM](https://vlsmcalc.vercel.app/)
+
+La siguiente tabla es fundamental para la creación de subredes. Contiene el tamaño de las posibles redes que se pueden crear con 8 bits:
+
+| Nº de IPs | Nº Host | Prefijo | Máscara de subred |
+| --- | --- | --- | --- |
+| 256 | 254 | /24 | 255.255.255.0 |
+| 128 | 126 | /25 | 255.255.255.128 |
+| 64  | 62  | /26 | 255.255.255.192 |
+| 32  | 30  | /27 | 255.255.255.224 |
+| 16  | 14  | /28 | 255.255.255.240 |
+| 8   | 6   | /29 | 255.255.255.248 |
+| 4   | 2   | /30 | 255.255.255.252 |
+
+1. **Primera regla**. Ordenar por tamaño las redes de mayor a menor.
+2. **Segunda regla**. Comenzar desde la IP que representa a toda la red (acaba en cero)
+
+Una vez cumplimentados la primera y segunda regla, los pasos a seguir son:
+
+- Paso 1: determinar el tamaño de la subred (número de bits en la máscara de red) para la IP y el número de Host solicitados.
+- Paso 2: determinar la dirección IP de la próxima subred, una vez cumplimentado el paso anterior.
+
+## VLSM tipos A y B
+
+Tabla con los tamaños de subredes superiores a 256.
+
+| Nº bits | Nº de IPs | Host | Prefijo | Máscara de subred |
+| --------- | --------- | ---- | ------- | ----------------- |
+| $2^{14}$ | 16384 | 16382 | /18 | 255.255.192.0 |
+| $2^{13}$ | 8192  | 8190  | /19 | 255.255.224.0 |
+| $2^{12}$ | 4096  | 4094  | /20 | 255.255.240.0 |
+| $2^{11}$ | 2048  | 2046  | /21 | 255.255.248.0 |
+| $2^{10}$ | 1024  | 1022  | /22 | 255.255.252.0 |
+| $2^{9}$ | 512 | 510 | /23 | 255.255.254.0 |
+| $2^{8}$ | 256 | 254 | /24 | 255.255.255.0 |
+| $2^{7}$ | 128 | 126 | /25 | 255.255.254.128 |
+| $2^{6}$ | 64 | 62 | /26 | 255.255.255.192 |
+| $2^{5}$ | 32 | 30 | /27 | 255.255.255.224 |
+| $2^{4}$ | 16 | 14 | /28 | 255.255.255.240 |
+| $2^{3}$ | 8 | 6 | /29 | 255.255.255.248 |
+| $2^{2}$ | 4 | 2 | /30 | 255.255.255.252 |
