@@ -59,6 +59,13 @@
     - [Pasos para el Subneteo Magic Number\_](#pasos-para-el-subneteo-magic-number_)
   - [VLSM tipo C](#vlsm-tipo-c)
   - [VLSM tipos A y B](#vlsm-tipos-a-y-b)
+  - [Inverso a Subneteo](#inverso-a-subneteo)
+  - [Arquitectura del Router](#arquitectura-del-router)
+    - [Comando SHOW](#comando-show)
+    - [Comando HOSTNAME](#comando-hostname)
+    - [Comando SECRET - PASSWORD](#comando-secret---password)
+    - [Comando MOTD](#comando-motd)
+    - [Comando COPY](#comando-copy)
 
 ---
 
@@ -786,7 +793,7 @@ Realizar el ejemplo anterior determinando 6 subredes usando la IP de red 192.168
 
 ## VLSM tipo C
 
->[!IMPORTANT]
+>[!NOTE]
 >VLSM (Variable Length Subnet Mask)</br>
 >Enlace web con una calculadora de subneteo:</br>
 >[VLSM](https://vlsmcalc.vercel.app/)
@@ -830,3 +837,124 @@ Tabla con los tamaños de subredes superiores a 256.
 | $2^{4}$ | 16 | 14 | /28 | 255.255.255.240 |
 | $2^{3}$ | 8 | 6 | /29 | 255.255.255.248 |
 | $2^{2}$ | 4 | 2 | /30 | 255.255.255.252 |
+
+## Inverso a Subneteo
+
+>[!IMPORTANT]
+>Se trata de encontrar la red padre que contenga un conjunto de subredes.
+
+- _Paso 1_: determinar el octeto a partir del cual, hay variaciones y descartar el siguiente octeto.
+- _Paso 2_: pasar a binario el octeto con variación.
+- _Paso 3_: comparando todas las IPs encontrar los bits (octeto con variación) que si cambian de valor y sustituirlos por _x_ (indeterminado). El resto de bits si tendrán el mismo valor.
+- _Paso 4_: contar el número de bits con valor _indeterminado_ (valor x del paso 1 y paso 3).
+- _Paso 5_: determinar la máscara de red, teniendo en cuenta los bits determinados en el paso anterior.
+
+&sect;&nbsp;Ejemplo determinar IP de red a partir de grupo de IP con subneteo.
+
+```{texto}
+- 192.168.1.250
+- 192.168.0.100
+- 192.168.3.25
+- 192.168.1.30
+- 192.168.2.254
+- 192.168.1.100
+
+- 192.168.00000001.xxxxxxxx
+- 192.168.00000000.xxxxxxxx
+- 192.168.00000011.xxxxxxxx
+- 192.168.00000001.xxxxxxxx
+- 192.168.00000010.xxxxxxxx
+- 192.168.00000001.xxxxxxxx
+
+- 192.168.000000xx.xxxxxxxx
+- 192.168.00000000.00000000 => IP de red
+- 255.255.11111100.00000000 => Máscara de subred
+- 255.255.252.0
+```
+
+## Arquitectura del Router
+
+&sect;&nbsp;Un _Router_ es como un ordenador, diseñado para enrutar paquetes de datos.
+
+1. **CPU**. Procesa los cálculos matemáticos.
+2. **FLASH**. Guarda los archivos del SO. En Cisoc IOS (Internetwork Operating System).
+3. **RAM**. En _running-config_ se cargan las configuraciones y parte del SO.
+4. **NVRAM**. Mémoria no volátil de acceso aleatorio. Guarda configuraciones en _startup-config_.
+5. **ROM**. Almacena un pequeño SO para el arranque inicial y arranca el SO posteriormente.
+
+Al principio del proceso de arranque en el _Router_; el SO Cisco IOS es administrado por una línea de comandos o **CLI** (Command Line Interface).
+
+Los modos principales son:
+
+- Modo de usuario (EXEC de usuario).
+- Modo de ejecución priviligiado (EXEC de priviligiado).
+- Modo de configuración global.
+
+Estructura jerárquica de los modos del IOS.
+
+![alt text](image-10.png)
+
+### Comando SHOW
+
+Es un comando que se puede utilizar en _Switch_ o en _Router_. Este comando muestra información sobre la versión, hardware y los dispositivos.
+
+![alt text](image-11.png)
+
+### Comando HOSTNAME
+
+Es un comando que se puede utilizar en _Switch_ o en _Router_. Sirve para asignar el nombre al dispositivo.
+
+>[!NOTE]
+>Para deshacer los efectos de un comando, escribir **NO** antes del comando.
+
+```cisco
+Switch> enable
+Switch# configure terminal
+Switch(config)# hostname NOMBRESWITCH
+```
+
+### Comando SECRET - PASSWORD
+
+&sect;&nbsp;La contraseña de _enable_ limita el acceso al modo EXEC priviligiado.
+
+```cisco
+Switch> enable
+Switch# configure terminal
+Switch(config)# enable secret MiContraseña
+Switch(config)# exit
+```
+
+&sect;&nbsp;La contraseña secreta de _enable_, es una contraseña encriptada que limita el acceso al modo EXEC priviligiado.
+
+```cisco
+Switch> enable
+Switch# configure terminal
+Switch(config)# line console 0
+Switch(config-line)# password MiContraseña
+Switch(config-line)# login
+```
+
+### Comando MOTD
+
+Este comando muestra un mensaje al iniciar el proceso de arranque y antes de habilitar el acceso por contraseña al CLI, tanto para _Switch_ como para _Router_.
+
+```cisco
+Switch> enable
+Switch# configure terminal
+Switch(config)# banner motd # ESTE ES EL MENSAJE DE INICIO #
+Switch(config)# exit
+```
+
+### Comando COPY
+
+- **Archivo de configuración en Ejecución**:
+  - Refleja la configuración actual aplicada a un dispositivo Cisco IOS.
+  - Contiene los comandos utilizados para determinar cómo funciona el dispositivo en la red.
+  - La modificaciónd de la configuración afecta al funcionamiento.
+
+- **Archivo de configuración de Inicio**:
+  - Refleja la configuración que utilizará el dispositivo cuando se reinicie.
+  - El archivo de configuración de inicio se almacena en NVRAM.
+  - Al configurar al dispositivo, se guardan los cambios en archivo de configuración de inicio.
+
+![alt text](image-12.png)
