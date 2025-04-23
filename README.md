@@ -66,6 +66,7 @@
     - [Comando SECRET - PASSWORD](#comando-secret---password)
     - [Comando MOTD](#comando-motd)
     - [Comando COPY](#comando-copy)
+  - [Práctica Configuración red Telefonía VoIP y Datos](#práctica-configuración-red-telefonía-voip-y-datos)
 
 ---
 
@@ -958,3 +959,99 @@ Switch(config)# exit
   - Al configurar al dispositivo, se guardan los cambios en archivo de configuración de inicio.
 
 ![alt text](image-12.png)
+
+---
+
+## Práctica Configuración red Telefonía VoIP y Datos
+
+![alt text](image-13.png "Esquema de red voz y datos")
+
+Configuración del _Switch_:
+
+```cisco
+Switch> enable
+Switch# configure terminal
+Switch(config)#↨ interface FastEthernet 0/1
+Switch(config-if)#switchport mode trunk
+Switch(config-if)#switchport trunk native vlan 30
+Switch(config-if)#exit
+
+Switch(config)#interface range fa0/2-5
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#exit
+
+Switch(config)#interface range fa0/2-5
+Switch(config-if-range)#switchport voice vlan 20
+Switch(config-if-range)#vlan 10
+Switch(config-vlan)#name DATOS
+Switch(config-vlan)#vlan 20
+Switch(config-vlan)#name VOZ
+Switch(config-vlan)#vlan 30
+Switch(config-vlan)#name NATIVA
+Switch(config-vlan)#end
+```
+
+Ejecutando el comando `show vlan brief` veremos las _vlan_ creadas:
+
+![alt text](image-14.png "Tabla VLAN del _Switch_")
+
+La configuración en el _Router_:
+
+```cisco
+Router> enable
+Router# configure terminal
+Router(config)#interface FastEthernet 0/0
+Router(config-if)#no shutdown
+Router(config-if)#exit
+
+Router(config)#interface fa0/0.10
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip address 192.168.10.1 255.255.255.0
+Router(config-subif)#exit
+
+Router(config)#interface fa0/0.20
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip address 192.168.20.1 255.255.255.0
+Router(config-subif)#exit
+
+Router(config)#interface fa0/0.30
+Router(config-subif)#encapsulation dot1Q 30 native 
+Router(config-subif)#exit
+
+Router(config)#ip dhcp pool VOZ
+Router(dhcp-config)#network 192.168.20.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.20.1
+Router(dhcp-config)#option 150 ip 192.168.20.1
+Router(dhcp-config)#exit
+
+Router(config)#ip dhcp pool DATOS
+Router(dhcp-config)#network 192.168.10.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.10.1
+Router(dhcp-config)#exit
+
+Router(config)#ip dhcp excluded-address 192.168.20.1
+Router(config)#ip dhcp excluded-address 192.168.10.1
+
+Router(config)#telephony-service 
+Router(config-telephony)#max-dn 3
+Router(config-telephony)#max-ephones 3
+Router(config-telephony)#ip source-address 192.168.20.1 port 2000
+Router(config-telephony)#auto assign 4 to 6
+Router(config-telephony)#auto assign 4 to 6
+Router(config-telephony)#exit
+
+Router(config)#ephone-dn 1
+Router(config-ephone-dn)#number 1001
+Router(config-ephone-dn)#ephone-dn 2
+Router(config-ephone-dn)#number 1002
+Router(config-ephone-dn)#exit
+```
+
+Cuando conectamos los teléfonos a la alimentación eléctrica y configuramos los PC en el servicio DHCP, nos indicará las direcciones IP:
+
+![alt text](image-15.png "Configuración del _Router_")
+![alt text](image-16.png "Teléfono con IP")
+![alt text](image-17.png "Realización de llamadas")
+
+---
